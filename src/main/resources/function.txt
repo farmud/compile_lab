@@ -1,0 +1,3 @@
+function int f ( int b , int a){
+a = 2
+}

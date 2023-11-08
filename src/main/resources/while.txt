@@ -1,0 +1,1 @@
+while ( arg1 != arg2 ) a = 2

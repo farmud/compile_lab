@@ -1,0 +1,91 @@
+<program>::= <declaration> | <statement> | <expression>  | <function>  // 程序
+
+<declaration>::= <type> <identifier>    // 声明
+<type>::= INTEGER                       // 类型
+<identifier>::= IDENTIFIER              // 标识符
+
+<statement>::= <assignment> | <loop> | <selection>         // 语句
+<assignment>::= <identifier> ASSIGN <expression>    // 赋值语句
+<judge>::=<expression> EQUAL <expression> | <expression> NOT_EQUAL <expression> | <expression> LESS_EQUAL <expression> | <expression> GREATER_EQUAL <expression> | <expression> GREATER <expression> | <expression> LESS <expression>    // 判断
+<loop>::= WHILE LEFT_PAREN <judge> RIGHT_PAREN <statement>     // 循环语句
+<selection>::= IF LEFT_PAREN <judge> RIGHT_PAREN <statement> | IF LEFT_PAREN <judge> RIGHT_PAREN <statement> ELSE <statement>    // 条件语句
+
+<expression>::= <term> | <term> <addop> <expression>        // 表达式
+<term>::= <factor> | <factor> <mulop> <term>                // 项
+<factor>::= <identifier> | LEFT_PAREN <expression> RIGHT_PAREN   // 因子
+<addop>::= PLUS | MINUS                                         // 加法运算符
+<mulop>::= MULTIPLY | DIVIDE                                    // 乘法运算符
+
+<function>::= <type> <identifier> LEFT_PAREN <declaration_list> RIGHT_PAREN LEFT_BRACE  <statement> RIGHT_BRACE
+<declaration_list>::= <declaration> | <declaration> COMMA <declaration_list>
+===================================================================================================
+
+记号表示：
+<program>       ->  G
+<declaration>   ->  D
+<type>          ->  T
+<identifier>    ->  I
+<statement>     ->  S
+<assignment>    ->  A
+<expression>    ->  E
+<judge>         ->  J
+<loop>          ->  L
+<selection>     ->  N
+<term>          ->  M
+<factor>        ->  F
+<addop>         ->  O
+<mulop>         ->  P
+
+
+===================================================================================================
+重写后的表达式：
+G -> D | S | E
+D -> TI
+T -> INTEGER
+I -> IDENTIFIER
+S -> A | L | N
+A -> IE
+J -> E == E | E != E | E <= E | E >= E | E > E | E < E
+L -> WHILE ( J ) S
+N -> IF ( J ) S | IF ( J ) S ELSE S
+E -> M | MPE
+M -> R | RUM
+F -> I | ( E )
+O -> + | -
+P -> * | /
+
+
+
+===================================================================================================
+11.7修正后的文法：
+init -> program
+<program>::= <declaration> | <statement> | <function>  | <assignment> // 程序
+
+<declaration>::= TYPE <identifier>    // 声明
+<identifier>::= IDENTIFIER              // 标识符
+
+<statement>::= <assignment> | <loop> | <selection>         // 语句
+<assignment>::= <identifier> ASSIGN INTEGER   // 赋值语句
+<assignment>::= <identifier> ASSIGN <identifier>   // 赋值语句
+<judge>::=<identifier> EQUAL <identifier> | <identifier> NOT_EQUAL <identifier> | <identifier> LESS_EQUAL <identifier> | <identifier> GREATER_EQUAL <identifier> | <identifier> GREATER <identifier> | <identifier> LESS <identifier>    // 判断
+<loop>::= WHILE LEFT_PAREN <judge> RIGHT_PAREN <statement>     // 循环语句
+<selection>::= IF LEFT_PAREN <judge> RIGHT_PAREN <statement> | IF LEFT_PAREN <judge> RIGHT_PAREN <statement> ELSE <statement>    // 条件语句
+
+
+<function>::= FUNCTION TYPE <identifier> LEFT_PAREN <declaration_list> RIGHT_PAREN LEFT_BRACE  <statement> RIGHT_BRACE
+<declaration_list>::= <declaration> | <declaration> COMMA <declaration_list>
+
+
+===================================================================================================
+11.8 对应的follow集合：
+init: #
+program: #
+declaration: #, COMMA, RIGHT_PAREN
+statement: # , ELSE, RIGHT_BRACE
+function: #
+assignment: #, ELSE, RIGHT_BRACE
+loop: #, ELSE, RIGHT_BRACE
+selection: #, ELSE, RIGHT_BRACE
+identifier: # , ASSIGN , EQUAL , NOT_EQUAL , LESS_EQUAL , GREATER_EQUAL , GREATER , LESS , COMMA, LEFT_PAREN, RIGHT_PAREN, ELSE
+judge: # , RIGHT_PAREN
+declaration_list: # , RIGHT_PAREN
